@@ -21,15 +21,42 @@
         th { 
             background-color: #f2f2f2; 
         }
-        button { 
+        button#sapxep { 
             padding: 8px 15px; 
             cursor: pointer; 
             background-color: #007bff; 
             color: white; 
             border: none; 
         }
-        button:hover { 
+        button#them { 
+            padding: 8px 15px; 
+            cursor: pointer; 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+        }
+        button#them:hover { 
+            background-color: #218838; 
+        }
+        button#sapxep:hover { 
             background-color: #0056b3; 
+        }
+        .form-nhap {
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            max-width: 400px;
+        }
+        .form-nhap input {
+            width: 90%;
+            padding: 6px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .form-nhap button {
+            padding: 6px 12px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -37,7 +64,31 @@
 
     <h2>Quản lý công nhân</h2>
     
-    <button onclick="sapXepVaHienThi()">Sắp xếp theo họ và tên</button>
+    <button onclick="sapXepVaHienThi()" id="sapxep">Sắp xếp theo họ và tên</button>
+    <button onclick="hienThiFormThem()" id="them">Thêm công nhân mới</button>
+
+    <div id="vungNhapThongTin" class="form-nhap" style="display: none;">
+        <h3 id="tieudeForm">Nhập thông tin công nhân mới</h3>
+        <input type="hidden" id="viTriSua" value="-1">
+        
+        <label>Họ và tên:</label>
+        <input type="text" id="inpTen">
+        
+        <label>Ngày sinh (dd-mm-yyyy):</label>
+        <input type="text" id="inpNgaySinh">
+        
+        <label>Địa chỉ:</label>
+        <input type="text" id="inpDiaChi">
+        
+        <label>Lương:</label>
+        <input type="number" id="inpLuong">
+        
+        <label>Chức vụ:</label>
+        <input type="text" id="inpChucVu">
+        
+        <button onclick="luuCongNhan()">Lưu lại</button>
+        <button onclick="anFormThem()" style="background-color: #6c757d; color: white; border: none;">Hủy</button>
+    </div>
 
     <table>
         <thead>
@@ -48,6 +99,7 @@
                 <th>Địa chỉ</th>
                 <th>Lương</th>
                 <th>Chức vụ</th>
+                <th colspan="2" style="text-align: center;">Chức năng</th>
             </tr>
         </thead>
         <tbody id="danhSachCongNhan"></tbody>
@@ -62,6 +114,7 @@
             this.diaChi = diaChi;
             this.luong = luong;
             this.chucVu = chucVu;
+            this.chucnang = "";
         }
     }
 
@@ -84,6 +137,8 @@
                             "<td>" + cn.diaChi + "</td>" +
                             "<td>" + cn.luong + "</td>" +
                             "<td>" + cn.chucVu + "</td>" +
+                            "<td style='text-align: center;'><button onclick='sua(" + i + ")'>Sửa</button></td>" +
+                            "<td style='text-align: center;'><button onclick='xoa(" + i + ")'>Xóa</button></td>" +
                          "</tr>";
         }
         
@@ -103,11 +158,92 @@
             }
         }
 
+        capNhatSTT();
+        hienThiTrangList();
+    }
+
+    function capNhatSTT() {
         for (let i = 0; i < danhSach.length; i++) {
             danhSach[i].stt = i + 1;
         }
+    }
 
+    function hienThiFormThem() {
+        document.getElementById("tieudeForm").innerHTML = "Nhập thông tin công nhân mới";
+        document.getElementById("viTriSua").value = "-1";
+        xoaTrangCacO();
+        document.getElementById("vungNhapThongTin").style.display = "block";
+    }
+
+    function anFormThem() {
+        document.getElementById("vungNhapThongTin").style.display = "none";
+        xoaTrangCacO();
+    }
+
+    function xoaTrangCacO() {
+        document.getElementById("inpTen").value = "";
+        document.getElementById("inpNgaySinh").value = "";
+        document.getElementById("inpDiaChi").value = "";
+        document.getElementById("inpLuong").value = "";
+        document.getElementById("inpChucVu").value = "";
+    }
+
+    function luuCongNhan() {
+        let hoVaTen = document.getElementById("inpTen").value;
+        let ngaySinh = document.getElementById("inpNgaySinh").value;
+        let diaChi = document.getElementById("inpDiaChi").value;
+        let luong = parseFloat(document.getElementById("inpLuong").value);
+        let chucVu = document.getElementById("inpChucVu").value;
+        let viTri = parseInt(document.getElementById("viTriSua").value);
+
+        if (hoVaTen === "" || ngaySinh === "" || diaChi === "" || chucVu === "") {
+            alert("Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        if (isNaN(luong) || luong < 0) {
+            alert("Lương không được âm và phải là số hợp lệ!");
+            return;
+        }
+
+        if (viTri === -1) {
+            let stt = danhSach.length + 1;
+            let congNhanMoi = new CongNhan(stt, hoVaTen, ngaySinh, diaChi, luong, chucVu);
+            danhSach.push(congNhanMoi);
+        } else {
+            danhSach[viTri].hoVaTen = hoVaTen;
+            danhSach[viTri].ngaySinh = ngaySinh;
+            danhSach[viTri].diaChi = diaChi;
+            danhSach[viTri].luong = luong;
+            danhSach[viTri].chucVu = chucVu;
+        }
+        
+        capNhatSTT();
         hienThiTrangList();
+        anFormThem();
+    }
+
+    function sua(index) {
+        document.getElementById("tieudeForm").innerHTML = "Chỉnh sửa thông tin công nhân";
+        document.getElementById("viTriSua").value = index;
+        
+        let cn = danhSach[index];
+        document.getElementById("inpTen").value = cn.hoVaTen;
+        document.getElementById("inpNgaySinh").value = cn.ngaySinh;
+        document.getElementById("inpDiaChi").value = cn.diaChi;
+        document.getElementById("inpLuong").value = cn.luong;
+        document.getElementById("inpChucVu").value = cn.chucVu;
+        
+        document.getElementById("vungNhapThongTin").style.display = "block";
+    }
+
+    function xoa(index) {
+        let xacNhan = confirm("Bạn có chắc chắn muốn xóa công nhân " + danhSach[index].hoVaTen + " không?");
+        if (xacNhan === true) {
+            danhSach.splice(index, 1);
+            capNhatSTT();
+            hienThiTrangList();
+        }
     }
 </script>
 
