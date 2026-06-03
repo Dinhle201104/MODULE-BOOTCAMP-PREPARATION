@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Câu 2: Kiểm tra số hoàn hảo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin-top: 10px; padding: 5px 15px; cursor: pointer; }
+        #ketQua { margin-top: 15px; font-weight: bold; color: rgb(0, 0, 0); }
+    </style>
+</head>
+<body>
+
+    <h3>Kiểm tra số hoàn hảo</h3>
+    
+    <label>Nhập vào một số nguyên dương: </label>
+    <input type="number" id="oNhapSo" placeholder="Ví dụ: 6, 9, 28">
+    
+    <br>
+    <button onclick="chayChuongTrinh()">Kiểm tra</button>
+
+    <div id="ketQua"></div>
+
+<script>
+    function kiemTraSoHoanHao(n) {
+        if (n <= 1) {
+            return false;
+        }
+
+        let tongCacUoc = 0;
+
+        for (let i = 1; i < n; i++) {
+            if (n % i === 0) {
+                tongCacUoc = tongCacUoc + i; 
+            }
+        }
+
+        if (tongCacUoc === n) {
+            return true; 
+        } else {
+            return false; 
+        }
+    }
+    function chayChuongTrinh() {
+        let soNhap = parseInt(document.getElementById("oNhapSo").value);
+        
+        if (isNaN(soNhap) || soNhap <= 0) {
+            document.getElementById("ketQua").innerHTML = "Vui lòng nhập một số nguyên dương lớn hơn 0!";
+            return;
+        }
+
+        let ketQuaKiemTra = kiemTraSoHoanHao(soNhap);
+
+        if (ketQuaKiemTra === true) {
+            document.getElementById("ketQua").innerHTML = "Kết quả cho số " + soNhap + ": True (Là số hoàn hảo)";
+        } else {
+            document.getElementById("ketQua").innerHTML = "Kết quả cho số " + soNhap + ": False (Không phải số hoàn hảo)";
+        }
+    }
+</script>
+
+</body>
+</html>

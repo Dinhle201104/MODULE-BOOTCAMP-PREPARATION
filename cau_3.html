@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Câu 3: Tính số ngày trong tháng</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin-top: 10px; padding: 5px 15px; cursor: pointer; }
+        #ketQua { margin-top: 15px; font-weight: bold; color: rgb(14, 14, 14); }
+
+    </style>
+</head>
+<body>
+
+    <h3>Tính số ngày trong tháng</h3>
+    
+    <label>Nhập tháng/năm (định dạng MM/yyyy): </label>
+    <input type="text" id="oNhapVao" placeholder="Ví dụ: 02/2020">
+    
+    <br>
+    <button onclick="chayChuongTrinh()">Tính số ngày</button>
+
+    <div id="ketQua"></div>
+
+<script>
+    function laNamNhuan(nam) {
+        if (nam % 400 === 0) {
+            return true; 
+        }
+        if (nam % 100 === 0) {
+            return false; 
+        }
+        if (nam % 4 === 0) {
+            return true; 
+        }
+        return false; 
+    }
+
+    function tinhSoNgay(thang, nam) {
+        let soNgay = 0;
+
+        switch (thang) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                soNgay = 31;
+                break;
+            case 4: case 6: case 9: case 11:
+                soNgay = 30;
+                break;
+            case 2:
+                if (laNamNhuan(nam) === true) {
+                    soNgay = 29;
+                } else {
+                    soNgay = 28;
+                }
+                break;
+        }
+        return soNgay;
+    }
+
+    function chayChuongTrinh() {
+        let chuoiNhap = document.getElementById("oNhapVao").value.trim();
+        let vungKetQua = document.getElementById("ketQua");
+        if (chuoiNhap.length !== 7 || chuoiNhap.indexOf("/") !== 2) {
+            vungKetQua.innerHTML = "<span class='error'>Lỗi: Định dạng phải là MM/yyyy (Ví dụ: 02/2020)</span>";
+            return;
+        }
+
+        let chuoiThang = chuoiNhap.substring(0, 2); 
+        let chuoiNam = chuoiNhap.substring(3, 7);   
+
+        let thang = parseInt(chuoiThang);
+        let nam = parseInt(chuoiNam);
+
+        if (isNaN(thang) || isNaN(nam) || thang < 1 || thang > 12 || nam <= 0) {
+            vungKetQua.innerHTML = "<span class='error'>Lỗi: Tháng hoặc năm nhập vào không hợp lệ!</span>";
+            return;
+        }
+
+        let ketQuaNgay = tinhSoNgay(thang, nam);
+        
+        vungKetQua.innerHTML = "Tháng " + chuoiThang + "/" + nam + " có: " + ketQuaNgay + " ngày.";
+    }
+</script>
+
+</body>
+</html

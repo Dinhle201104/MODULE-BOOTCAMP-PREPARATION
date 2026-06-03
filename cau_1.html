@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Câu 1: Khóa cơ bản (Sử dụng let)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px; 
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 15px;
+            cursor: pointer; 
+        }
+        #ketQua {
+            margin-top: 15px;
+            font-weight: bold;
+            color: rgb(10, 10, 12);
+        }
+    </style>
+</head>
+<body>
+
+    <h3>Tính trung bình cộng các số chia hết cho 3</h3>
+    
+    <label>Nhập các số (cách nhau bằng dấu phẩy): </label>
+    <input type="text" id="oNhapVao" placeholder="Ví dụ: 3,4,6,9,10">
+    
+    <br>
+    <button onclick="chayChuongTrinh()">Xem kết quả</button>
+
+    <div id="ketQua"></div>
+<script> 
+    function chayChuongTrinh() {
+        let chuoiNhap = document.getElementById("oNhapVao").value;
+        if (chuoiNhap == "") {
+            document.getElementById("ketQua").innerHTML = "Vui lòng nhập số!";
+            return;
+        }
+        let mangChuoi = chuoiNhap.split(",");
+        if (mangChuoi.length > 50) {
+            document.getElementById("ketQua").innerHTML = "Lỗi: Không được nhập quá 50 phần tử!";
+            return;
+        }
+        let mangSoNguyen = [];
+        for (let i = 0; i < mangChuoi.length; i++) {
+            let so = Number(mangChuoi[i]); 
+            mangSoNguyen.push(so); 
+        }
+        let noiDungHienThi = "Mảng bạn vừa nhập: [" + mangSoNguyen.join(", ") + "] <br>";
+        let tong = 0;
+        let soLuong = 0;
+        for (let i = 0; i < mangSoNguyen.length; i++) {
+          
+            if (mangSoNguyen[i] % 3 === 0) {
+                tong = tong + mangSoNguyen[i]; 
+                soLuong = soLuong + 1;       
+            }
+        }
+        if (soLuong > 0) {
+            let trungBinhCong = tong / soLuong;
+            noiDungHienThi += "Trung bình cộng các số chia hết cho 3 là: " + trungBinhCong.toFixed(2);
+        } else {
+            noiDungHienThi += "Không có số nào trong mảng chia hết cho 3.";
+        }
+
+        document.getElementById("ketQua").innerHTML = noiDungHienThi;
+    }
+</script>
+
+</body>
+</html>
